@@ -38,7 +38,7 @@ export const imageGenerationHandler = async (request, env) => {
                 num_steps: json.n || 5, // Default to 5 if not specified
             };
 
-            const respStream = await env.AI.run(model, inputs); // Get the response stream
+            const respStream = await env.AI.run(json.model || model, inputs); // Get the response stream
             const respBuffer = await streamToBuffer(respStream); // Buffer the stream into memory
 
             if (format === 'b64_json') {
