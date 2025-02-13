@@ -13,11 +13,11 @@ export const imageGenerationHandler = async (request, env) => {
             if (!json?.prompt) {
                 throw new Error('no prompt provided');
             }
-            if (json?.format) {
-                format = json.format;
-                if (format !== 'b64_json' && format !== 'url') {
-                    throw new Error('invalid format. must be b64_json or url');
-                }
+            // Support both format and response_format
+            const requestedFormat = json?.response_format || json?.format || 'url';
+            format = requestedFormat;
+            if (format !== 'b64_json' && format !== 'url') {
+                throw new Error('invalid format. must be b64_json or url');
             }
 
             const inputs = {
