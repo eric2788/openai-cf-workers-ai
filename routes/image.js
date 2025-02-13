@@ -20,8 +20,22 @@ export const imageGenerationHandler = async (request, env) => {
                 throw new Error('invalid format. must be b64_json or url');
             }
 
+            // Parse size parameter
+            let width = 512;
+            let height = 512;
+            if (json.size) {
+                const [w, h] = json.size.split('x').map(num => parseInt(num, 10));
+                if (w && h) {
+                    width = w;
+                    height = h;
+                }
+            }
+
             const inputs = {
                 prompt: json.prompt,
+                width,
+                height,
+                num_steps: json.n || 5, // Default to 5 if not specified
             };
 
             const respStream = await env.AI.run(model, inputs); // Get the response stream
